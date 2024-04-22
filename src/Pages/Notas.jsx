@@ -185,7 +185,7 @@ const Notas = ({ onContinue, onReturn, dts }) => {
 
   const handleSubmitRedirect = (event) => {
     event.preventDefault();
-    onContinue();
+    onReturn();
   };
 
   return (
