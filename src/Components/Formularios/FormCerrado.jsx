@@ -660,6 +660,7 @@ const FormCerrado = ({ registerID, onContinue, onReturn, dts }) => {
               required
             />
           </div>
+          <div className="slot-vacio"></div>
         </div>
         <div className="form-cont">
           <div className="slot">
