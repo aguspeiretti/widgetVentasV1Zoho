@@ -23,8 +23,6 @@ function App(data) {
       });
   }, [module, registerID]);
 
-  //Aca llamamos a las funciones de zoho para traer o enviar data. Se les pasa como parametro la info que necesitan para ejecutarse.
-
   return (
     <div className="App">
       <Home datos={datos} registerID={registerID} dts={data} />

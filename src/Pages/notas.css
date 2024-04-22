@@ -1,10 +1,14 @@
 .notas {
   margin-top: 30px;
+  display: flex;
+  padding: 0 150px;
+  width: 100vw;
 }
 .notas textarea {
   border: none;
   background-color: #cfcfcf94;
   border-radius: 15px;
+  width: 70vw;
   padding: 30px;
   margin-top: 50px;
 }

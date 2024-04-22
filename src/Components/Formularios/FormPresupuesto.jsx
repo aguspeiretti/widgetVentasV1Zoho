@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { getRecord } from "../../functions/apiFunctions";
@@ -16,19 +17,21 @@ const FormPresupuesto = ({ datos, registerID, onContinue, dts, onReturn }) => {
   const [descuentoAplicar, setDescuentoAplicar] = useState("");
   const [numeroPaginas, setNumeroPaginas] = useState("");
   const [formData, setFormData] = useState({
-    id: registerID[0],
+    id: registerID,
     primerPago: "",
     paginasPrimerPago: "",
     importeFinal: "",
     dni: "",
     nombreYapellido: "",
     nOrden: "",
+    importeAsesor: "",
+    descuentoAplicar: "",
   });
 
   useEffect(() => {
-    window.ZOHO.CRM.UI.Resize({ height: "100%", width: "100%" }).then(function (
-      data
-    ) {});
+    // window.ZOHO.CRM.UI.Resize({ height: "100%", width: "100%" }).then(function (
+    //   data
+    // ) {});
 
     getRecord(module, rEgisterID)
       .then(function (result) {
@@ -44,7 +47,7 @@ const FormPresupuesto = ({ datos, registerID, onContinue, dts, onReturn }) => {
     if (newDatos) {
       setPrimerPago(newDatos.Primer_Pago || "b");
       setDni(newDatos.DNI_CIF || "a");
-      setDirFacturacion(datos.Direcci_n_de_facturaci_n || ""); // Corregido el nombre del campo
+      setDirFacturacion(newDatos.Direcci_n_de_facturaci_n || ""); // Corregido el nombre del campo
       setNombreYapellido(newDatos.Nombre_y_apellidos || "");
       setImporteAsesor(newDatos.Importe_Asesor || "");
       setDescuentoAplicar(newDatos.Descuento_a_Aplicar || "");

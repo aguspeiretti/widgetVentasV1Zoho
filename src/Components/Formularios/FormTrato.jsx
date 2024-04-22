@@ -10,24 +10,26 @@ const FormTrato = ({ datos, registerID, onContinue, dts }) => {
   const [coordinacion, setCoordinacion] = useState("");
   const [gestion, setGestion] = useState("");
   const [referenciaCliente, setReferenciaCliente] = useState("");
+  const [nombreTrato, setNombreTrato] = useState("");
   const [fechaContratacion, setFechaContratacion] = useState("");
   const [fechaEnvio, setFechaEnvio] = useState("");
   const [carrera, setCarrera] = useState("");
   const [fields, setFields] = useState([]);
   const [formData, setFormData] = useState({
-    id: registerID[0],
+    id: registerID,
     Coordinacion: "",
     Gestion: "",
     Referencia_Cliente: "",
     Fecha_de_Entrega_para_Ventas: "",
     Fecha_de_Contrataci_n_de_Servicios: "",
     Carrera: "",
+    Deal_Name: "",
   });
 
   useEffect(() => {
-    window.ZOHO.CRM.UI.Resize({ height: "100%", width: "100%" }).then(function (
-      data
-    ) {});
+    // window.ZOHO.CRM.UI.Resize({ height: "100%", width: "100%" }).then(function (
+    //   data
+    // ) {});
 
     getRecord(module, rEgisterID)
       .then(function (result) {
@@ -41,6 +43,7 @@ const FormTrato = ({ datos, registerID, onContinue, dts }) => {
 
   useEffect(() => {
     if (newDatos) {
+      setNombreTrato(newDatos.Referencia_Cliente);
       setCoordinacion(newDatos.Coordinador_del_Proyecto || "");
       setGestion(newDatos.Gest || "");
       setReferenciaCliente(newDatos.Referencia_Cliente || "");
@@ -57,6 +60,7 @@ const FormTrato = ({ datos, registerID, onContinue, dts }) => {
       Coordinador_del_Proyecto: coordinacion,
       Gest: gestion,
       Referencia_Cliente: referenciaCliente,
+      Deal_Name: referenciaCliente,
       Fecha_de_Entrega_para_Ventas: fechaEnvio,
       Fecha_de_Contrataci_n_de_Servicios: fechaContratacion,
       Carrera: carrera,
@@ -85,6 +89,14 @@ const FormTrato = ({ datos, registerID, onContinue, dts }) => {
       console.log(data);
       return data;
     } catch (error) {
+      Swal.fire({
+        title: "Error",
+        text: `${error}`,
+        icon: "error",
+        timer: 2000,
+        showConfirmButton: false,
+        position: "top-end",
+      });
       console.error(error);
       throw error; // Rechaza la promesa con el error para que pueda ser capturado externamente
     }

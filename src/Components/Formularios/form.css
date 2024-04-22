@@ -69,6 +69,7 @@ h2 {
   position: absolute;
   top: 0px;
   left: 150px;
+  margin-top: 20px;
 }
 .btns-guardado {
   width: 182px;
@@ -126,4 +127,10 @@ textarea {
 }
 .slot span {
   margin-top: 5px;
+}
+.campo-incompleto {
+  border: 1px solid red;
+}
+.text textarea {
+  padding-top: 15px;
 }

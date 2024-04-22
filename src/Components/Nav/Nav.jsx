@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import "./nav.css";
 
 const Nav = ({ handleSelect, selected }) => {
@@ -5,6 +6,11 @@ const Nav = ({ handleSelect, selected }) => {
     handleSelect(itemName);
   };
 
+  const cerrar = () => {
+    window.ZOHO.CRM.UI.Popup.closeReload().then(function (data) {
+      console.log(data);
+    });
+  };
   return (
     <div className="contenedor-nav">
       <ul>
@@ -35,6 +41,9 @@ const Nav = ({ handleSelect, selected }) => {
           4
         </li>
       </ul>
+      <div onClick={cerrar} className="cerrar">
+        X
+      </div>
     </div>
   );
 };

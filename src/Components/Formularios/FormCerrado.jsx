@@ -1,8 +1,9 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { getRecord } from "../../functions/apiFunctions";
 
-const FormCerrado = ({ datos, registerID, onContinue, onReturn, dts }) => {
+const FormCerrado = ({ registerID, onContinue, onReturn, dts }) => {
   const module = dts.data.Entity;
   const rEgisterID = dts.data.EntityId;
   const [newDatos, setNewDatos] = useState(null);
@@ -27,9 +28,10 @@ const FormCerrado = ({ datos, registerID, onContinue, onReturn, dts }) => {
   const [tipoDeInvestigacion, setTipoDeInvestigacion] = useState("");
   const [comentarioCerrado, setComentarioCerrado] = useState("");
   const [comentarioCLiente, setComentarioCliente] = useState("");
+  const [tratoTildado, setTratoTildado] = useState(true);
   const [fields, setFields] = useState([]);
   const [formData, setFormData] = useState({
-    id: registerID[0],
+    id: registerID,
     fechasEspecificas: "",
     algoHecho: "",
     cuantasPaginas: "",
@@ -52,10 +54,12 @@ const FormCerrado = ({ datos, registerID, onContinue, onReturn, dts }) => {
     comentarioCLientes: "",
   });
 
+  console.log("tildado??", tratoTildado);
+
   useEffect(() => {
-    window.ZOHO.CRM.UI.Resize({ height: "100%", width: "100%" }).then(function (
-      data
-    ) {});
+    // window.ZOHO.CRM.UI.Resize({ height: "100%", width: "100%" }).then(function (
+    //   data
+    // ) {});
 
     getRecord(module, rEgisterID)
       .then(function (result) {
@@ -70,6 +74,7 @@ const FormCerrado = ({ datos, registerID, onContinue, onReturn, dts }) => {
   useEffect(() => {
     getFields();
     if (newDatos) {
+      setTratoTildado(newDatos.Trato_Latam_Creado || "");
       setechasEspecificas(newDatos.Tiene_fechas_espec_ficas || "");
       setAlgoHecho(newDatos.Tiene_algo_hecho_el_cliente || "");
       setCuantasPaginas(newDatos.Cu_ntas_p_ginas_aporta_el_cliente || "");
@@ -89,7 +94,7 @@ const FormCerrado = ({ datos, registerID, onContinue, onReturn, dts }) => {
       setcoordinadorNp(newDatos.Coordinador_NP || "");
       setEspecificas(newDatos.Cu_les_son_las_fechas_espec_ficas || "");
       setAlgoValidado(newDatos.Tiene_algo_validado || "");
-      setAplicarCorrecciones(datos.Hay_que_aplicar_correcciones || "");
+      setAplicarCorrecciones(newDatos.Hay_que_aplicar_correcciones || "");
       setPaginasNuevas(newDatos.Cu_ntas_p_ginas_son_nuevas || "");
       setHabladoSobre(
         newDatos.Has_hablado_con_el_cliente_sobre_la_cantidad_de_e || ""
@@ -172,14 +177,17 @@ const FormCerrado = ({ datos, registerID, onContinue, onReturn, dts }) => {
     const field = fields.find((item) => item.api_name === apiName);
     return field ? field.pick_list_values || [] : [];
   };
-
-  const pickers = fields.filter((item) => item.data_type === "picklist");
-  console.log(pickers);
+  // const indice = getFieldValues(
+  //   fields,
+  //   "El_cliente_tiene_un_indice_que_debe_seguirse"
+  // );
+  // const pcorrecciones = getFieldValues(fields, "Cu_ntas_p_ginas_son_nuevas");
+  // const especificass = getFieldValues(fields, "Cu_les_son_las_fechas_espec_");
+  // const pickers = fields.filter((item) => item.data_type === "picklist");
   const [comentarioCerradoLength, setComentarioCerradoLength] = useState(0);
   const [comentarioClienteLength, setComentarioClienteLength] = useState(0);
   const fechas = getFieldValues(fields, "Tiene_fechas_espec_ficas");
   const algo = getFieldValues(fields, "Tiene_algo_hecho_el_cliente");
-  const especificass = getFieldValues(fields, "Cu_les_son_las_fechas_espec_");
   const validado = getFieldValues(fields, "Tiene_algo_validado");
   const aplicarCorreccion = getFieldValues(
     fields,
@@ -191,16 +199,11 @@ const FormCerrado = ({ datos, registerID, onContinue, onReturn, dts }) => {
   );
   const trabajonp = getFieldValues(fields, "Tipo_de_trabajo_np");
   const investigacionnp = getFieldValues(fields, "Tipo_de_investigaci_n_np");
-  const pcorrecciones = getFieldValues(fields, "Cu_ntas_p_ginas_son_nuevas");
   const aportado = getFieldValues(
     fields,
     "El_cliente_ha_aportado_toda_la_informaci_n_o_a_n"
   );
   const tcampo = getFieldValues(fields, "Tiene_trabajo_de_campo");
-  const indice = getFieldValues(
-    fields,
-    "El_cliente_tiene_un_indice_que_debe_seguirse"
-  );
 
   // FUNCION PARA ACTUALIZAR LOS CLIENTES
 
@@ -258,8 +261,6 @@ const FormCerrado = ({ datos, registerID, onContinue, onReturn, dts }) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-
-    // Si todos los campos están completos, procede a guardar
     onReturn();
   };
   const handleComentarioCerradoChange = (e) => {
@@ -354,6 +355,88 @@ const FormCerrado = ({ datos, registerID, onContinue, onReturn, dts }) => {
       setEspecificas("");
     }
   };
+
+  const cerrarWidget = () => {
+    const camposVacios = [
+      !fechasEspecificas,
+      !especificas && fechasEspecificas === "Sí",
+      !algoHecho,
+      !cuantasPaginas,
+      !paginaCorrecciones,
+      !porcentajeDePlagio,
+      !acuerdoPagos,
+      !informacionAportada,
+      !trabajoDeCampo,
+      !tieneIndice,
+      !coordinadorNp,
+      !algoValidado,
+      !aplicarCorrecciones,
+      !paginasNuevas,
+      !habladoSobre,
+      !cantidadDeAdjuntos,
+      !tipoDeTrabajo,
+      !tipoDeInvestigacion,
+    ];
+
+    const nombresCampos = [
+      "¿Tiene fechas específicas?",
+      "¿Cuáles son las fechas específicas?",
+      "¿Tiene algo hecho el cliente?",
+      "¿Cuántas páginas aporta el cliente?",
+      "¿Cuántas páginas son de correcciones?",
+      "¿Porcentaje de plagio de lo que tenga hecho?",
+      "¿Qué has acordado sobre los pagos/entregas?",
+      "¿El cliente ha aportado toda la información o aún no?",
+      "¿Tiene trabajo de campo?",
+      "El cliente tiene un indice que debe seguirse?",
+      "Coordinador NP",
+      "¿Tiene algo validado?",
+      "¿Hay que aplicar correcciones?",
+      "¿Cuántas páginas son nuevas?",
+      "¿Has hablado con el cliente sobre la cantidad de entregas?",
+      "Cantidad de adjuntos",
+      "Tipo de trabajo np",
+      "Comentario cerrado np",
+      // "Comentario Cliente",
+    ];
+    const campoFaltanteIndex = camposVacios.findIndex((campo) => campo);
+
+    if (fechasEspecificas === "Sí" && !especificas) {
+      camposVacios.push(true);
+    }
+    // Verifica si algún campo está vacío
+    if (campoFaltanteIndex !== -1) {
+      // Muestra un mensaje de error indicando qué campo falta completar
+      Swal.fire({
+        title: `Complete ${nombresCampos[campoFaltanteIndex]} `,
+        text: "",
+        icon: "error",
+        timer: 2000,
+        showConfirmButton: false,
+        position: "center",
+      });
+      return; // Evita que el formulario se envíe si hay campos vacíos
+    }
+    guardarDatos();
+    let func_name = "test";
+    let req_data = {
+      arguments: JSON.stringify({
+        dealID: rEgisterID,
+      }),
+    };
+    window.ZOHO.CRM.FUNCTIONS.execute(func_name, req_data)
+      .then(function () {
+        window.ZOHO.CRM.BLUEPRINT.proceed();
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+
+    window.ZOHO.CRM.UI.Popup.closeReload().then(function (data) {
+      console.log(data);
+    });
+  };
+
   return (
     <div className="expansor">
       <div className="btns-container">
@@ -361,13 +444,19 @@ const FormCerrado = ({ datos, registerID, onContinue, onReturn, dts }) => {
           <li onClick={handleSubmit} className="btns-guardado" type="submit">
             Volver
           </li>
-          <li
-            onClick={handleSubmitRedirect}
-            className="btns-guardado"
-            type="submit"
-          >
-            Guardar y Continuar
-          </li>
+          {tratoTildado ? (
+            <li
+              onClick={handleSubmitRedirect}
+              className="btns-guardado"
+              type="submit"
+            >
+              Guardar y Continuar
+            </li>
+          ) : (
+            <li onClick={cerrarWidget} className="btns-guardado" type="submit">
+              Guardar y Cerrar
+            </li>
+          )}
         </ul>
       </div>
       <h2 className="title">Cerrado nuevas pautas</h2>
@@ -633,7 +722,7 @@ const FormCerrado = ({ datos, registerID, onContinue, onReturn, dts }) => {
             </select>
           </div>
 
-          <div className="slot">
+          <div className="slot text">
             <label htmlFor="comentarioCerrado">Comentario cerrado np</label>
             <textarea
               id="comentarioCerrado"
@@ -646,7 +735,7 @@ const FormCerrado = ({ datos, registerID, onContinue, onReturn, dts }) => {
             <span>Caracteres restantes: {1900 - comentarioCerradoLength}</span>
           </div>
 
-          <div className="slot">
+          <div className="slot text">
             <label htmlFor="comentarioCerrado">Comentarios Cliente</label>
             <textarea
               id="comentarioCLiente"

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Nav from "../Components/Nav/Nav";
 import "./home.css";
 import InfoTrato from "../Pages/InfoTrato";
