@@ -272,7 +272,7 @@ const FormCerrado = ({ registerID, onContinue, onReturn, dts }) => {
   const handleComentarioClienteChange = (e) => {
     const inputValue = e.target.value;
     // Limitar la longitud del comentario a 1900 caracteres
-    if (inputValue.length <= 1900) {
+    if (inputValue.length <= 25000) {
       setComentarioCliente(inputValue);
       setComentarioClienteLength(inputValue.length);
     }
