@@ -1,9 +1,10 @@
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
 import "./form.css";
 import Swal from "sweetalert2";
 import { getRecord } from "../../functions/apiFunctions";
 
-const FormTrato = ({ datos, registerID, onContinue, dts }) => {
+const FormTrato = ({ registerID, onContinue, dts }) => {
   const module = dts.data.Entity;
   const rEgisterID = dts.data.EntityId;
   const [newDatos, setNewDatos] = useState(null);
@@ -26,21 +27,20 @@ const FormTrato = ({ datos, registerID, onContinue, dts }) => {
     Deal_Name: "",
   });
 
-  useEffect(() => {
-    // window.ZOHO.CRM.UI.Resize({ height: "100%", width: "100%" }).then(function (
-    //   data
-    // ) {});
+  //funcion que trae la info del modulo al cargar la pagina y los setea en la variable newDatos
 
+  useEffect(() => {
     getRecord(module, rEgisterID)
       .then(function (result) {
         const datos = result.register;
         setNewDatos(datos);
       })
       .catch(function (error) {
-        // console.error(error);
+        console.error(error);
       });
   }, [module, rEgisterID]);
 
+  // asignacion de los valores a los campos dependiendo si llegaron los datos , se ejecuta al iniciar
   useEffect(() => {
     if (newDatos) {
       setNombreTrato(newDatos.Referencia_Cliente);
@@ -52,7 +52,10 @@ const FormTrato = ({ datos, registerID, onContinue, dts }) => {
       setCarrera(newDatos.Carrera || "");
     }
     getFields();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [newDatos]);
+
+  // seteo de los datos del form con las variables que ya estaba antes
 
   useEffect(() => {
     setFormData({
@@ -76,7 +79,8 @@ const FormTrato = ({ datos, registerID, onContinue, dts }) => {
     carrera,
   ]);
 
-  // FUNCION PARA ACTUALIZAR LOS CLIENTES
+  // funcion SDK soho para actualizar un elemento
+
   const config = {
     Entity: "Deals",
     APIData: formData,
@@ -102,6 +106,7 @@ const FormTrato = ({ datos, registerID, onContinue, dts }) => {
     }
   }
 
+  //funcion para guardar los cambios
   const guardarDatos = () => {
     updateRecord(config)
       .then((resultado) => {
@@ -137,7 +142,7 @@ const FormTrato = ({ datos, registerID, onContinue, dts }) => {
       });
   };
 
-  // FUNCION PARA TRAER  TODOS LOS DESPLEGABLES
+  // funcion para traer todos los campos del elemento
 
   const getFields = (entrity) => {
     return new Promise(function (resolve, reject) {
@@ -152,49 +157,19 @@ const FormTrato = ({ datos, registerID, onContinue, dts }) => {
     });
   };
 
-  // FUNCION PARA FILTRAR TODOS LOS DESPLEGABLES
+  // funcion para traer los campos desplegables y filtrarlos
 
   const getFieldValues = (fields, apiName) => {
     const field = fields.find((item) => item.api_name === apiName);
     return field ? field.pick_list_values || [] : [];
   };
-
+  // muestra solo los campos desplegables
   const pickers = fields.filter((item) => item.data_type === "picklist");
   console.log(pickers);
-
   const coord = getFieldValues(fields, "Coordinador_del_Proyecto");
-
   const gest = getFieldValues(fields, "Gest");
 
-  // FUNCION PARA ACTUALIZAR LOS CLIENTES
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-
-    // Verifica si algún campo está vacío
-    if (
-      !coordinacion ||
-      !gestion ||
-      !referenciaCliente ||
-      !fechaEnvio ||
-      !fechaContratacion ||
-      !carrera
-    ) {
-      // Muestra un mensaje de error
-      Swal.fire({
-        title: "Error",
-        text: "Por favor completa todos los campos antes de guardar.",
-        icon: "error",
-        timer: 2000,
-        showConfirmButton: false,
-        position: "top-end",
-      });
-      return; // Evita que el formulario se envíe si hay campos vacíos
-    }
-
-    // Si todos los campos están completos, procede a guardar
-    guardarDatos();
-  };
+  // funcion submit para activar el guardado de datos
 
   const handleSubmitRedirect = (event) => {
     event.preventDefault();
@@ -250,7 +225,7 @@ const FormTrato = ({ datos, registerID, onContinue, dts }) => {
           </li>
         </ul>
       </div>
-      <form className="form-trato" onSubmit={handleSubmit}>
+      <form className="form-trato">
         <div className="form-cont">
           <h2>informacion de trato</h2>
           <div className="slot">

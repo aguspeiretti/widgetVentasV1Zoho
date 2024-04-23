@@ -9,9 +9,13 @@ import Notas from "../Pages/Notas";
 const Home = ({ datos, registerID, dts }) => {
   const [title, setTitle] = useState("Información de Trato");
 
+  //selector de titulo para la renderizacion
+
   const handleSelect = (select) => {
     setTitle(select);
   };
+
+  //redireccionadores para los forms
 
   const redirectToPresupuesto = () => {
     setTitle("Información de Presupuesto");
@@ -37,7 +41,6 @@ const Home = ({ datos, registerID, dts }) => {
                 {title === "Información de Trato" ? (
                   <InfoTrato
                     dts={dts}
-                    datos={datos}
                     registerID={registerID}
                     onContinue={redirectToPresupuesto}
                   />

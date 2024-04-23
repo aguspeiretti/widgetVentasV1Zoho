@@ -16,6 +16,8 @@ const FormPresupuesto = ({ datos, registerID, onContinue, dts, onReturn }) => {
   const [importeAsesor, setImporteAsesor] = useState("");
   const [descuentoAplicar, setDescuentoAplicar] = useState("");
   const [numeroPaginas, setNumeroPaginas] = useState("");
+  const ifinal = importeAsesor - descuentoAplicar;
+  const ppp = ifinal / numeroPaginas;
   const [formData, setFormData] = useState({
     id: registerID,
     primerPago: "",
@@ -28,11 +30,8 @@ const FormPresupuesto = ({ datos, registerID, onContinue, dts, onReturn }) => {
     descuentoAplicar: "",
   });
 
+  //funcion que trae la info del modulo al cargar la pagina y los setea en la variable newDatos
   useEffect(() => {
-    // window.ZOHO.CRM.UI.Resize({ height: "100%", width: "100%" }).then(function (
-    //   data
-    // ) {});
-
     getRecord(module, rEgisterID)
       .then(function (result) {
         const datos = result.register;
@@ -43,6 +42,7 @@ const FormPresupuesto = ({ datos, registerID, onContinue, dts, onReturn }) => {
       });
   }, [module, rEgisterID]);
 
+  // asignacion de los valores a los campos dependiendo si llegaron los datos , se ejecuta al iniciar
   useEffect(() => {
     if (newDatos) {
       setPrimerPago(newDatos.Primer_Pago || "b");
@@ -55,10 +55,8 @@ const FormPresupuesto = ({ datos, registerID, onContinue, dts, onReturn }) => {
       setImporteFinal(ifinal);
     }
   }, [newDatos]);
-  const ifinal = importeAsesor - descuentoAplicar;
 
-  const ppp = ifinal / numeroPaginas;
-
+  // seteo de los datos del form con las variables que ya estaba antes
   useEffect(() => {
     setFormData({
       ...formData,
@@ -81,7 +79,7 @@ const FormPresupuesto = ({ datos, registerID, onContinue, dts, onReturn }) => {
     descuentoAplicar,
   ]);
 
-  // FUNCION PARA ACTUALIZAR LOS CLIENTES
+  // funcion SDK soho para actualizar un elemento
   const config = {
     Entity: "Deals",
     APIData: formData,
@@ -98,6 +96,8 @@ const FormPresupuesto = ({ datos, registerID, onContinue, dts, onReturn }) => {
       throw error; // Rechaza la promesa con el error para que pueda ser capturado externamente
     }
   }
+
+  //funcion para actualizar
 
   const guardarDatos = () => {
     updateRecord(config)
@@ -134,12 +134,7 @@ const FormPresupuesto = ({ datos, registerID, onContinue, dts, onReturn }) => {
       });
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-
-    // Si todos los campos están completos, procede a guardar
-    onReturn();
-  };
+  // funcion submit para activar el guardado de datos
 
   const handleSubmitRedirect = (event) => {
     event.preventDefault();
@@ -183,11 +178,17 @@ const FormPresupuesto = ({ datos, registerID, onContinue, dts, onReturn }) => {
     onContinue();
   };
 
+  //funcion pora volver al componente anterior
+  const backTo = (event) => {
+    event.preventDefault();
+    onReturn();
+  };
+
   return (
     <>
       <div className="btns-container">
         <ul>
-          <li onClick={handleSubmit} className="btns-guardado" type="submit">
+          <li onClick={backTo} className="btns-guardado" type="submit">
             Volver
           </li>
           <li
@@ -199,7 +200,7 @@ const FormPresupuesto = ({ datos, registerID, onContinue, dts, onReturn }) => {
           </li>
         </ul>
       </div>
-      <form className="form-trato" onSubmit={handleSubmit}>
+      <form className="form-trato">
         <div className="form-cont">
           <h2>informacion de presupuesto</h2>
           <div className="slot">

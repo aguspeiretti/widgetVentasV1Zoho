@@ -1,41 +1,23 @@
 import React, { useEffect, useState } from "react";
-import "./notas.css";
-import { getRecord } from "../functions/apiFunctions";
 import Swal from "sweetalert2";
+import "./notas.css";
 
-const Notas = ({ onContinue, onReturn, dts }) => {
-  const [nota, setNota] = useState(""); // Estado para guardar la nota
-  const [tratoTildado, setTratoTildado] = useState(false);
-  const module = dts.data.Entity;
+const Notas = ({ onReturn, dts }) => {
+  const [nota, setNota] = useState("");
   const rEgisterID = dts.data.EntityId;
-  const [newDatos, setNewDatos] = useState(null);
+  const [remainingChars, setRemainingChars] = useState(1900);
   const [formData, setFormData] = useState({
     id: rEgisterID,
     nota: "",
   });
-  const [fields, setFields] = useState([]);
-  const [remainingChars, setRemainingChars] = useState(1900);
 
-  const getFields = () => {
-    return new Promise(function (resolve, reject) {
-      window.ZOHO.CRM.META.getFields({ Entity: "Deals" })
-        .then(function (response) {
-          setFields(response.fields);
-          console.log(fields);
-          resolve(); // Resuelve la promesa cuando se obtienen los campos
-        })
-        .catch(function (error) {
-          reject(error);
-        });
-    });
-  };
+  //Funcion para ver cantidad de caracteres restantes
 
-  // useEffect(() => {
-  //   if (newDatos) {
-  //     setNota(newDatos.Comentarios_cerrado_correcto || "");
-  //   }
-  //   getFields(); // Llama a la función para obtener los campos
-  // }, [newDatos]);
+  useEffect(() => {
+    setRemainingChars(1900 - nota.length); // Update remaining characters count
+  }, [nota]);
+
+  //seteador de datos en el form para envio
 
   useEffect(() => {
     setFormData({
@@ -46,10 +28,14 @@ const Notas = ({ onContinue, onReturn, dts }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [nota]);
 
+  //datos de config para el updaterecord
+
   const config = {
     Entity: "Deals",
     APIData: formData,
   };
+
+  // funcion SDK soho para actualizar un elemento
 
   async function updateRecord(config) {
     console.log("dento del config", config);
@@ -67,9 +53,11 @@ const Notas = ({ onContinue, onReturn, dts }) => {
         position: "top-end",
       });
       console.error(error);
-      throw error; // Rechaza la promesa con el error para que pueda ser capturado externamente
+      throw error;
     }
   }
+
+  //funcion para actualizar
 
   const guardarDatos = () => {
     return new Promise((resolve, reject) => {
@@ -92,8 +80,7 @@ const Notas = ({ onContinue, onReturn, dts }) => {
             timer: 2000,
             showConfirmButton: false,
           });
-          resolve(); // Resuelve la promesa cuando se guardan los datos correctamente
-          // window.location.reload();
+          resolve();
         })
         .catch((error) => {
           Swal.fire({
@@ -109,6 +96,8 @@ const Notas = ({ onContinue, onReturn, dts }) => {
         });
     });
   };
+
+  // funcion para cerrar el widget
 
   const cerrarWidget = () => {
     let func_name = "test";
@@ -130,22 +119,7 @@ const Notas = ({ onContinue, onReturn, dts }) => {
     });
   };
 
-  useEffect(() => {
-    getRecord(module, rEgisterID)
-      .then(function (result) {
-        const datos = result.register;
-        setNewDatos(datos);
-      })
-      .catch(function (error) {
-        // console.error(error);
-      });
-  }, [module, rEgisterID]);
-
-  useEffect(() => {
-    if (newDatos) {
-      setTratoTildado(newDatos.Trato_Latam_Creado || "");
-    }
-  }, [newDatos]);
+  //manejador del evento de cambio en el textArea nota
 
   const handleChange = (event) => {
     const text = event.target.value;
@@ -153,9 +127,8 @@ const Notas = ({ onContinue, onReturn, dts }) => {
       setNota(text);
     }
   };
-  useEffect(() => {
-    setRemainingChars(1900 - nota.length); // Update remaining characters count
-  }, [nota]);
+
+  // funcion submit para activar el guardado de datos
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -183,7 +156,9 @@ const Notas = ({ onContinue, onReturn, dts }) => {
     }
   };
 
-  const handleSubmitRedirect = (event) => {
+  // funcion para voler a la componente anterior
+
+  const backTo = (event) => {
     event.preventDefault();
     onReturn();
   };
@@ -193,7 +168,7 @@ const Notas = ({ onContinue, onReturn, dts }) => {
       <form onSubmit={handleSubmit}>
         <div className="btns-container">
           <ul>
-            <li onClick={handleSubmitRedirect} className="btns-guardado">
+            <li onClick={backTo} className="btns-guardado">
               volver
             </li>
             <li onClick={handleSubmit} className="btns-guardado">

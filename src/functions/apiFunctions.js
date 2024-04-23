@@ -1,3 +1,5 @@
+//trae todos los registros del apartado que se seleccione (deals , leads , etc)
+
 export function getRecord(module, registerID) {
   return new Promise(function (resolve, reject) {
     window.ZOHO.CRM.API.getRecord({ Entity: module, RecordID: registerID })
@@ -10,6 +12,8 @@ export function getRecord(module, registerID) {
       });
   });
 }
+
+//trae todos los usuarios
 
 export function getUsers() {
   return new Promise(function (resolve, reject) {
@@ -26,6 +30,8 @@ export function getUsers() {
       });
   });
 }
+
+//funcion para subir un archivo a zoho
 
 export function attachFile(registerID, file) {
   console.log("data del attach");
@@ -45,6 +51,8 @@ export function attachFile(registerID, file) {
   });
 }
 
+//funcion para traer los campos
+
 export function getFields(entrity) {
   return new Promise(function (resolve, reject) {
     window.ZOHO.CRM.META.getFields({ Entity: "Leads" })
@@ -56,6 +64,8 @@ export function getFields(entrity) {
       });
   });
 }
+
+//funcion execute
 
 export function execute(func_name, req_data) {
   return new Promise(function (resolve, reject) {

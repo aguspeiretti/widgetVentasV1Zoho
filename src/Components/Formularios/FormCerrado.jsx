@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
@@ -54,13 +55,8 @@ const FormCerrado = ({ registerID, onContinue, onReturn, dts }) => {
     comentarioCLientes: "",
   });
 
-  console.log("tildado??", tratoTildado);
-
+  //funcion que trae la info del modulo al cargar la pagina y los setea en la variable newDatos
   useEffect(() => {
-    // window.ZOHO.CRM.UI.Resize({ height: "100%", width: "100%" }).then(function (
-    //   data
-    // ) {});
-
     getRecord(module, rEgisterID)
       .then(function (result) {
         const datos = result.register;
@@ -71,6 +67,7 @@ const FormCerrado = ({ registerID, onContinue, onReturn, dts }) => {
       });
   }, [module, rEgisterID]);
 
+  // asignacion de los valores a los campos dependiendo si llegaron los datos , se ejecuta al iniciar
   useEffect(() => {
     getFields();
     if (newDatos) {
@@ -107,6 +104,7 @@ const FormCerrado = ({ registerID, onContinue, onReturn, dts }) => {
     }
   }, [newDatos]);
 
+  // seteo de los datos del form con las variables que ya estaba antes
   useEffect(() => {
     setFormData({
       ...formData,
@@ -156,7 +154,14 @@ const FormCerrado = ({ registerID, onContinue, onReturn, dts }) => {
     comentarioCLiente,
   ]);
 
-  // FUNCION PARA TRAER  TODOS LOS DESPLEGABLES
+  //funcion pora volver al componente anterior
+
+  const backTo = (event) => {
+    event.preventDefault();
+    onReturn();
+  };
+
+  // funcion para traer todos los campos del elemento
 
   const getFields = (entrity) => {
     return new Promise(function (resolve, reject) {
@@ -171,19 +176,13 @@ const FormCerrado = ({ registerID, onContinue, onReturn, dts }) => {
     });
   };
 
-  // FUNCION PARA FILTRAR TODOS LOS DESPLEGABLES
+  // funcion para traer los campos desplegables y filtrarlos
 
   const getFieldValues = (fields, apiName) => {
     const field = fields.find((item) => item.api_name === apiName);
     return field ? field.pick_list_values || [] : [];
   };
-  // const indice = getFieldValues(
-  //   fields,
-  //   "El_cliente_tiene_un_indice_que_debe_seguirse"
-  // );
-  // const pcorrecciones = getFieldValues(fields, "Cu_ntas_p_ginas_son_nuevas");
-  // const especificass = getFieldValues(fields, "Cu_les_son_las_fechas_espec_");
-  // const pickers = fields.filter((item) => item.data_type === "picklist");
+
   const [comentarioCerradoLength, setComentarioCerradoLength] = useState(0);
   const [comentarioClienteLength, setComentarioClienteLength] = useState(0);
   const fechas = getFieldValues(fields, "Tiene_fechas_espec_ficas");
@@ -205,7 +204,7 @@ const FormCerrado = ({ registerID, onContinue, onReturn, dts }) => {
   );
   const tcampo = getFieldValues(fields, "Tiene_trabajo_de_campo");
 
-  // FUNCION PARA ACTUALIZAR LOS CLIENTES
+  // funcion SDK soho para actualizar un elemento
 
   const config = {
     Entity: "Deals",
@@ -224,6 +223,7 @@ const FormCerrado = ({ registerID, onContinue, onReturn, dts }) => {
     }
   }
 
+  //funcion para guardar los cambios
   const guardarDatos = () => {
     updateRecord(config)
       .then((resultado) => {
@@ -259,10 +259,8 @@ const FormCerrado = ({ registerID, onContinue, onReturn, dts }) => {
       });
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    onReturn();
-  };
+  //funcion pora limitar caracteres y espacios de los textArea
+
   const handleComentarioCerradoChange = (e) => {
     const inputValue = e.target.value;
     // Limitar la longitud del comentario a 1900 caracteres
@@ -279,6 +277,18 @@ const FormCerrado = ({ registerID, onContinue, onReturn, dts }) => {
       setComentarioClienteLength(inputValue.length);
     }
   };
+
+  //funcion para mostar o no y limpiar el campo fechas especificas
+
+  const handleFechasEspecificasChange = (e) => {
+    setechasEspecificas(e.target.value);
+    // Limpiar el campo de fechas específicas si el valor cambia a "no"
+    if (e.target.value === "No") {
+      setEspecificas("");
+    }
+  };
+
+  // funcion submit para activar el guardado de datos
 
   const handleSubmitRedirect = (event) => {
     event.preventDefault();
@@ -348,14 +358,8 @@ const FormCerrado = ({ registerID, onContinue, onReturn, dts }) => {
     guardarDatos();
     onContinue();
   };
-  const handleFechasEspecificasChange = (e) => {
-    setechasEspecificas(e.target.value);
-    // Limpiar el campo de fechas específicas si el valor cambia a "no"
-    if (e.target.value === "No") {
-      setEspecificas("");
-    }
-  };
 
+  // funcion para cerrar el widget y actualizar datos
   const cerrarWidget = () => {
     const camposVacios = [
       !fechasEspecificas,
@@ -418,6 +422,9 @@ const FormCerrado = ({ registerID, onContinue, onReturn, dts }) => {
       return; // Evita que el formulario se envíe si hay campos vacíos
     }
     guardarDatos();
+
+    //funcion execute ejecuta codigo externo
+
     let func_name = "test";
     let req_data = {
       arguments: JSON.stringify({
@@ -432,6 +439,8 @@ const FormCerrado = ({ registerID, onContinue, onReturn, dts }) => {
         console.log(error);
       });
 
+    //cierra el widget
+
     window.ZOHO.CRM.UI.Popup.closeReload().then(function (data) {
       console.log(data);
     });
@@ -441,7 +450,7 @@ const FormCerrado = ({ registerID, onContinue, onReturn, dts }) => {
     <div className="expansor">
       <div className="btns-container">
         <ul>
-          <li onClick={handleSubmit} className="btns-guardado" type="submit">
+          <li onClick={backTo} className="btns-guardado" type="submit">
             Volver
           </li>
           {tratoTildado ? (
@@ -460,7 +469,7 @@ const FormCerrado = ({ registerID, onContinue, onReturn, dts }) => {
         </ul>
       </div>
       <h2 className="title">Cerrado nuevas pautas</h2>
-      <form className="form-trato" onSubmit={handleSubmit}>
+      <form className="form-trato">
         <div className="form-cont">
           <div className="slot">
             <label htmlFor="fechasEspecificas">
