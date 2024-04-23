@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { getRecord } from "../../functions/apiFunctions";
 
-const FormPresupuesto = ({ datos, registerID, onContinue, dts, onReturn }) => {
+const FormPresupuesto = ({ registerID, onContinue, dts, onReturn }) => {
   const module = dts.data.Entity;
   const rEgisterID = dts.data.EntityId;
   const [newDatos, setNewDatos] = useState(null);
