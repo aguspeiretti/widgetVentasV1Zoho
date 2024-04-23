@@ -212,6 +212,10 @@ const FormTrato = ({ registerID, onContinue, dts }) => {
     onContinue();
   };
 
+  const handleKeyDown = (event) => {
+    event.preventDefault(); // Prevenir el comportamiento predeterminado del evento
+  };
+
   return (
     <div className="ordenador">
       <div className="btns-container">
@@ -273,26 +277,31 @@ const FormTrato = ({ registerID, onContinue, dts }) => {
           </div>
 
           <div className="slot">
-            <label htmlFor="fechaEnvio">Fecha de envio a ventas:</label>
-            <input
-              type="date"
-              id="fechaEnvio"
-              value={fechaEnvio}
-              onChange={(e) => setFechaEnvio(e.target.value)}
-              required
-            />
+            <label htmlFor="fechaEnvio">
+              Fecha de envio a ventas:
+              <input
+                type="date"
+                id="fechaEnvio"
+                value={fechaEnvio}
+                onChange={(e) => setFechaEnvio(e.target.value)}
+                required
+                onKeyDown={handleKeyDown}
+              />
+            </label>
           </div>
+
           <div className="slot">
             <label htmlFor="fechaContratacion">
               Fecha de contratacion de servicio:
+              <input
+                type="date"
+                id="fechaContratacion"
+                value={fechaContratacion}
+                onChange={(e) => setFechaContratacion(e.target.value)}
+                required
+                onKeyDown={handleKeyDown}
+              />
             </label>
-            <input
-              type="date"
-              id="fechaContratacion"
-              value={fechaContratacion}
-              onChange={(e) => setFechaContratacion(e.target.value)}
-              required
-            />
           </div>
           <div className="slot">
             <label htmlFor="carrera">Carrera:</label>

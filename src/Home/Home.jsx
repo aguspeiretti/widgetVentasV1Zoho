@@ -47,7 +47,6 @@ const Home = ({ datos, registerID, dts }) => {
                 ) : title === "Información de Presupuesto" ? (
                   <InfoPresupuesto
                     dts={dts}
-                    datos={datos}
                     registerID={registerID}
                     onContinue={redirectTocerrado}
                     onReturn={redirectTotrato}
@@ -55,14 +54,12 @@ const Home = ({ datos, registerID, dts }) => {
                 ) : title === "Notas" ? (
                   <Notas
                     dts={dts}
-                    datos={datos}
                     registerID={registerID}
                     onReturn={redirectTocerrado}
                   />
                 ) : title === "Cerrado nuevas pautas" ? (
                   <Cerrado
                     dts={dts}
-                    datos={datos}
                     registerID={registerID}
                     onContinue={redirectTonotas}
                     onReturn={redirectToPresupuesto}
@@ -70,7 +67,6 @@ const Home = ({ datos, registerID, dts }) => {
                 ) : (
                   <InfoTrato
                     dts={dts}
-                    datos={datos}
                     registerID={registerID}
                     onContinue={redirectToPresupuesto}
                   />

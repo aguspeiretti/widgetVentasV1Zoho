@@ -234,33 +234,42 @@ const FormPresupuesto = ({ registerID, onContinue, dts, onReturn }) => {
             />
           </div>
           <div className="slot">
-            <label htmlFor="paginasPrimerPago">Numero de paginas:</label>
+            <label htmlFor="paginasPrimerPago" style={{ color: "gray" }}>
+              Numero de paginas:
+            </label>
             <input
               type="number"
               id="numeroPaginas"
               value={numeroPaginas}
               onChange={(e) => setPaginasPrimerPago(e.target.value)}
               required
+              style={{ color: "gray" }}
             />
           </div>
           <div className="slot">
-            <label htmlFor="paginasPrimerPago">Páginas Primer Pago:</label>
+            <label htmlFor="paginasPrimerPago" style={{ color: "gray" }}>
+              Páginas Primer Pago:
+            </label>
             <input
               type="number"
               id="paginasPrimerPago"
               value={ppp}
               onChange={(e) => setPaginasPrimerPago(e.target.value)}
               required
+              style={{ color: "gray" }}
             />
           </div>
           <div className="slot">
-            <label htmlFor="importeFinal">Importe Final:</label>
+            <label htmlFor="importeFinal" style={{ color: "gray" }}>
+              Importe Final:
+            </label>
             <input
               type="number"
               id="importeFinal"
               value={ifinal}
               onChange={(e) => setImporteFinal(e.target.value)}
               required
+              style={{ color: "gray" }}
             />
           </div>
 
