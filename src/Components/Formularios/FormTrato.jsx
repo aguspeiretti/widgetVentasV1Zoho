@@ -237,7 +237,10 @@ const FormTrato = ({ registerID, onContinue, dts }) => {
             <select
               id="coordinacion"
               value={coordinacion}
-              onChange={(e) => setCoordinacion(e.target.value)}
+              onChange={(e) => {
+                const value = e.target.value === "-None-" ? "" : e.target.value;
+                setCoordinacion(value);
+              }}
               required
             >
               {coord.map((tipo, index) => (
@@ -252,7 +255,10 @@ const FormTrato = ({ registerID, onContinue, dts }) => {
             <select
               id="gestion"
               value={gestion}
-              onChange={(e) => setGestion(e.target.value)}
+              onChange={(e) => {
+                const value = e.target.value === "-None-" ? "" : e.target.value;
+                setGestion(value);
+              }}
               required
             >
               {gest.map((tipo, index) => (

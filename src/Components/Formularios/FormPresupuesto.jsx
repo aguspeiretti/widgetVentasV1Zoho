@@ -143,7 +143,6 @@ const FormPresupuesto = ({ registerID, onContinue, dts, onReturn }) => {
     const camposVacios = [
       !primerPago,
       !importeAsesor,
-      !descuentoAplicar,
       !dni,
       !nombreYapellido,
       !dirFacturacion,
@@ -152,7 +151,6 @@ const FormPresupuesto = ({ registerID, onContinue, dts, onReturn }) => {
     const nombresCampos = [
       "Primer Pago",
       "Importe Asesor",
-      "Descuento final",
       "DNI/CIF",
       "Nombre y apellidos",
       "Dirección de facturación",
@@ -230,7 +228,6 @@ const FormPresupuesto = ({ registerID, onContinue, dts, onReturn }) => {
               id="descuentoAplicar"
               value={descuentoAplicar}
               onChange={(e) => setDescuentoAplicar(e.target.value)}
-              required
             />
           </div>
           <div className="slot">

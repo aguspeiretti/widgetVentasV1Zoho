@@ -281,8 +281,13 @@ const FormCerrado = ({ registerID, onContinue, onReturn, dts }) => {
   //funcion para mostar o no y limpiar el campo fechas especificas
 
   const handleFechasEspecificasChange = (e) => {
-    setechasEspecificas(e.target.value);
-    // Limpiar el campo de fechas específicas si el valor cambia a "no"
+    if (e.target.value === "-None-") {
+      setechasEspecificas("");
+    } else {
+      setechasEspecificas(e.target.value);
+    }
+
+    // Limpiar el campo de fechas específicas si el valor cambia a "No"
     if (e.target.value === "No") {
       setEspecificas("");
     }
@@ -507,7 +512,10 @@ const FormCerrado = ({ registerID, onContinue, onReturn, dts }) => {
             <select
               id="algoHecho"
               value={algoHecho}
-              onChange={(e) => setAlgoHecho(e.target.value)}
+              onChange={(e) => {
+                const value = e.target.value === "-None-" ? "" : e.target.value;
+                setAlgoHecho(value);
+              }}
               required
             >
               {algo.map((tipo, index) => (
@@ -577,7 +585,10 @@ const FormCerrado = ({ registerID, onContinue, onReturn, dts }) => {
             <select
               id="informacionAportada"
               value={informacionAportada}
-              onChange={(e) => setInformacionAportada(e.target.value)}
+              onChange={(e) => {
+                const value = e.target.value === "-None-" ? "" : e.target.value;
+                setInformacionAportada(value);
+              }}
               required
             >
               {aportado.map((tipo, index) => (
@@ -592,7 +603,10 @@ const FormCerrado = ({ registerID, onContinue, onReturn, dts }) => {
             <select
               id="trabajoDeCampo"
               value={trabajoDeCampo}
-              onChange={(e) => setTrabajoDeCampo(e.target.value)}
+              onChange={(e) => {
+                const value = e.target.value === "-None-" ? "" : e.target.value;
+                setTrabajoDeCampo(value);
+              }}
               required
             >
               {tcampo.map((tipo, index) => (
@@ -630,7 +644,10 @@ const FormCerrado = ({ registerID, onContinue, onReturn, dts }) => {
             <select
               id="algoValidado"
               value={algoValidado}
-              onChange={(e) => setAlgoValidado(e.target.value)}
+              onChange={(e) => {
+                const value = e.target.value === "-None-" ? "" : e.target.value;
+                setAlgoValidado(value);
+              }}
               required
             >
               {validado.map((tipo, index) => (
@@ -647,7 +664,10 @@ const FormCerrado = ({ registerID, onContinue, onReturn, dts }) => {
             <select
               id="aplicarCorrecciones"
               value={aplicarCorrecciones}
-              onChange={(e) => setAplicarCorrecciones(e.target.value)}
+              onChange={(e) => {
+                const value = e.target.value === "-None-" ? "" : e.target.value;
+                setAplicarCorrecciones(value);
+              }}
               required
             >
               {aplicarCorreccion.map((tipo, index) => (
@@ -679,7 +699,10 @@ const FormCerrado = ({ registerID, onContinue, onReturn, dts }) => {
             <select
               id="habladoSobre"
               value={habladoSobre}
-              onChange={(e) => setHabladoSobre(e.target.value)}
+              onChange={(e) => {
+                const value = e.target.value === "-None-" ? "" : e.target.value;
+                setHabladoSobre(value);
+              }}
               required
             >
               {hablado.map((tipo, index) => (
@@ -704,7 +727,10 @@ const FormCerrado = ({ registerID, onContinue, onReturn, dts }) => {
             <select
               id="tipoDeTrabajo"
               value={tipoDeTrabajo}
-              onChange={(e) => setTipoDeTrabajo(e.target.value)}
+              onChange={(e) => {
+                const value = e.target.value === "-None-" ? "" : e.target.value;
+                setTipoDeTrabajo(value);
+              }}
               required
             >
               {trabajonp.map((tipo, index) => (
@@ -721,7 +747,10 @@ const FormCerrado = ({ registerID, onContinue, onReturn, dts }) => {
             <select
               id="tipoDeInvestigacion"
               value={tipoDeInvestigacion}
-              onChange={(e) => setTipoDeTrabajo(e.target.value)}
+              onChange={(e) => {
+                const value = e.target.value === "-None-" ? "" : e.target.value;
+                setTipoDeInvestigacion(value);
+              }}
               required
             >
               {investigacionnp.map((tipo, index) => (

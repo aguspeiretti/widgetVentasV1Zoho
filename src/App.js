@@ -4,6 +4,7 @@ import Home from "./Home/Home";
 import { getRecord } from "./functions/apiFunctions";
 
 function App(data) {
+  console.log(data);
   const module = data.data.Entity;
   const registerID = data.data.EntityId;
   const [datos, setDatos] = useState(null);
