@@ -306,6 +306,7 @@ const FormTrato = ({ registerID, onContinue, dts }) => {
                 onChange={(e) => setFechaContratacion(e.target.value)}
                 required
                 onKeyDown={handleKeyDown}
+                readOnly
               />
             </label>
           </div>

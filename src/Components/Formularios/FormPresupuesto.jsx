@@ -7,13 +7,12 @@ const FormPresupuesto = ({ registerID, onContinue, dts, onReturn }) => {
   const module = dts.data.Entity;
   const rEgisterID = dts.data.EntityId;
   const [newDatos, setNewDatos] = useState(null);
-  const [primerPago, setPrimerPago] = useState("");
-  const [paginasPrimerPago, setPaginasPrimerPago] = useState("");
+  const [primerPago, setPrimerPago] = useState(0);
   const [importeFinal, setImporteFinal] = useState("");
   const [dni, setDni] = useState("");
   const [nombreYapellido, setNombreYapellido] = useState("");
   const [dirFacturacion, setDirFacturacion] = useState("");
-  const [importeAsesor, setImporteAsesor] = useState("");
+  const [importeAsesor, setImporteAsesor] = useState(0);
   const [descuentoAplicar, setDescuentoAplicar] = useState("");
   const [numeroPaginas, setNumeroPaginas] = useState("");
   const ifinal = importeAsesor - descuentoAplicar;
@@ -45,14 +44,14 @@ const FormPresupuesto = ({ registerID, onContinue, dts, onReturn }) => {
   // asignacion de los valores a los campos dependiendo si llegaron los datos , se ejecuta al iniciar
   useEffect(() => {
     if (newDatos) {
-      setPrimerPago(newDatos.Primer_Pago || "b");
-      setDni(newDatos.DNI_CIF || "a");
-      setDirFacturacion(newDatos.Direcci_n_de_facturaci_n || ""); // Corregido el nombre del campo
+      setPrimerPago(newDatos.Primer_Pago || 0);
+      setDni(newDatos.DNI_CIF || "");
+      setDirFacturacion(newDatos.Direcci_n_de_facturaci_n || "");
       setNombreYapellido(newDatos.Nombre_y_apellidos || "");
-      setImporteAsesor(newDatos.Importe_Asesor || "");
-      setDescuentoAplicar(newDatos.Descuento_a_Aplicar || "");
-      setNumeroPaginas(newDatos.N_mero_de_P_ginas || "");
-      setImporteFinal(ifinal);
+      setImporteAsesor(newDatos.Importe_Asesor || 0);
+      setDescuentoAplicar(newDatos.Descuento_a_Aplicar || 0);
+      setNumeroPaginas(newDatos.N_mero_de_P_ginas || 0);
+      setImporteFinal(ppp);
     }
   }, [newDatos]);
 
@@ -69,15 +68,7 @@ const FormPresupuesto = ({ registerID, onContinue, dts, onReturn }) => {
       N_mero_de_P_ginas: numeroPaginas,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    primerPago,
-    paginasPrimerPago,
-    importeFinal,
-    dni,
-    nombreYapellido,
-    importeAsesor,
-    descuentoAplicar,
-  ]);
+  }, [primerPago, dni, nombreYapellido, importeAsesor, descuentoAplicar]);
 
   // funcion SDK soho para actualizar un elemento
   const config = {
@@ -141,11 +132,17 @@ const FormPresupuesto = ({ registerID, onContinue, dts, onReturn }) => {
 
     // Verifica si algún campo está vacío
     const camposVacios = [
-      !primerPago,
-      !importeAsesor,
-      !dni,
-      !nombreYapellido,
-      !dirFacturacion,
+      primerPago === null || primerPago === undefined || primerPago === "",
+      importeAsesor === null ||
+        importeAsesor === undefined ||
+        importeAsesor === "",
+      dni === null || dni === undefined || dni === "",
+      nombreYapellido === null ||
+        nombreYapellido === undefined ||
+        nombreYapellido === "",
+      dirFacturacion === null ||
+        dirFacturacion === undefined ||
+        dirFacturacion === "",
     ];
 
     const nombresCampos = [
@@ -238,24 +235,12 @@ const FormPresupuesto = ({ registerID, onContinue, dts, onReturn }) => {
               type="number"
               id="numeroPaginas"
               value={numeroPaginas}
-              onChange={(e) => setPaginasPrimerPago(e.target.value)}
+              onChange={(e) => setNumeroPaginas(e.target.value)}
               required
               style={{ color: "gray" }}
             />
           </div>
-          <div className="slot">
-            <label htmlFor="paginasPrimerPago" style={{ color: "gray" }}>
-              Páginas Primer Pago:
-            </label>
-            <input
-              type="number"
-              id="paginasPrimerPago"
-              value={ppp}
-              onChange={(e) => setPaginasPrimerPago(e.target.value)}
-              required
-              style={{ color: "gray" }}
-            />
-          </div>
+
           <div className="slot">
             <label htmlFor="importeFinal" style={{ color: "gray" }}>
               Importe Final:
@@ -263,7 +248,7 @@ const FormPresupuesto = ({ registerID, onContinue, dts, onReturn }) => {
             <input
               type="number"
               id="importeFinal"
-              value={ifinal}
+              value={ppp}
               onChange={(e) => setImporteFinal(e.target.value)}
               required
               style={{ color: "gray" }}
@@ -278,7 +263,7 @@ const FormPresupuesto = ({ registerID, onContinue, dts, onReturn }) => {
           <div className="slot">
             <label htmlFor="dni">DNI/CIF:</label>
             <input
-              type="number"
+              type="text"
               id="dni"
               value={dni}
               onChange={(e) => setDni(e.target.value)}

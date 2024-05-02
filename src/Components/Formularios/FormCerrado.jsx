@@ -10,21 +10,20 @@ const FormCerrado = ({ registerID, onContinue, onReturn, dts }) => {
   const [newDatos, setNewDatos] = useState(null);
   const [fechasEspecificas, setechasEspecificas] = useState("");
   const [algoHecho, setAlgoHecho] = useState("");
-  const [cuantasPaginas, setCuantasPaginas] = useState("");
-  const [paginaCorrecciones, setPaginaCorrecciones] = useState("");
+  const [cuantasPaginas, setCuantasPaginas] = useState(0);
+  const [paginaCorrecciones, setPaginaCorrecciones] = useState(0);
   const [porcentajeCorrecciones, setPorcentajeCorrecciones] = useState("");
-  const [porcentajeDePlagio, setPorcentajeDePlagio] = useState("");
-  const [acuerdoPagos, setAcuerdoPagos] = useState("");
+  const [porcentajeDePlagio, setPorcentajeDePlagio] = useState(0);
+  const [acuerdoPagos, setAcuerdoPagos] = useState(0);
   const [informacionAportada, setInformacionAportada] = useState("");
   const [trabajoDeCampo, setTrabajoDeCampo] = useState("");
   const [tieneIndice, setTieneIndice] = useState("");
-  const [coordinadorNp, setcoordinadorNp] = useState("");
   const [especificas, setEspecificas] = useState("");
   const [algoValidado, setAlgoValidado] = useState("");
   const [aplicarCorrecciones, setAplicarCorrecciones] = useState("");
-  const [paginasNuevas, setPaginasNuevas] = useState("");
+  const [paginasNuevas, setPaginasNuevas] = useState(0);
   const [habladoSobre, setHabladoSobre] = useState("");
-  const [cantidadDeAdjuntos, setCantidadDeAdjuntos] = useState("");
+  const [cantidadDeAdjuntos, setCantidadDeAdjuntos] = useState(0);
   const [tipoDeTrabajo, setTipoDeTrabajo] = useState("");
   const [tipoDeInvestigacion, setTipoDeInvestigacion] = useState("");
   const [comentarioCerrado, setComentarioCerrado] = useState("");
@@ -42,7 +41,7 @@ const FormCerrado = ({ registerID, onContinue, onReturn, dts }) => {
     informacionAportada: "",
     trabajoDeCampo: "",
     tieneIndice: "",
-    coordinadorNp: "",
+
     especificas: "",
     algoValidado: "",
     aplicarCorrecciones: "",
@@ -74,11 +73,11 @@ const FormCerrado = ({ registerID, onContinue, onReturn, dts }) => {
       setTratoTildado(newDatos.Trato_Latam_Creado || "");
       setechasEspecificas(newDatos.Tiene_fechas_espec_ficas || "");
       setAlgoHecho(newDatos.Tiene_algo_hecho_el_cliente || "");
-      setCuantasPaginas(newDatos.Cu_ntas_p_ginas_aporta_el_cliente || "");
-      setPaginaCorrecciones(newDatos.Cu_ntas_p_ginas_son_de_correcciones || "");
+      setCuantasPaginas(newDatos.Cu_ntas_p_ginas_aporta_el_cliente || 0);
+      setPaginaCorrecciones(newDatos.Cu_ntas_p_ginas_son_de_correcciones || 0);
       setPorcentajeCorrecciones(newDatos.porcentajeCorrecciones || "");
       setPorcentajeDePlagio(
-        newDatos.Porcentaje_de_plagio_de_lo_que_tenga_hecho || ""
+        newDatos.Porcentaje_de_plagio_de_lo_que_tenga_hecho || 0
       );
       setAcuerdoPagos(newDatos.Qu_has_acordado_sobre_los_pagos_entregas || "");
       setInformacionAportada(
@@ -88,15 +87,15 @@ const FormCerrado = ({ registerID, onContinue, onReturn, dts }) => {
       setTieneIndice(
         newDatos.El_cliente_tiene_un_indice_que_debe_seguirse || ""
       );
-      setcoordinadorNp(newDatos.Coordinador_NP || "");
+
       setEspecificas(newDatos.Cu_les_son_las_fechas_espec_ficas || "");
       setAlgoValidado(newDatos.Tiene_algo_validado || "");
       setAplicarCorrecciones(newDatos.Hay_que_aplicar_correcciones || "");
-      setPaginasNuevas(newDatos.Cu_ntas_p_ginas_son_nuevas || "");
+      setPaginasNuevas(newDatos.Cu_ntas_p_ginas_son_nuevas || 0);
       setHabladoSobre(
         newDatos.Has_hablado_con_el_cliente_sobre_la_cantidad_de_e || ""
       );
-      setCantidadDeAdjuntos(newDatos.Cantidad_de_adjuntos || "");
+      setCantidadDeAdjuntos(newDatos.Cantidad_de_adjuntos || 0);
       setTipoDeTrabajo(newDatos.Tipo_de_trabajo_np || "");
       setTipoDeInvestigacion(newDatos.Tipo_de_investigaci_n_np || "");
       setComentarioCerrado(newDatos.Comentario_cerrado_np || "");
@@ -117,7 +116,7 @@ const FormCerrado = ({ registerID, onContinue, onReturn, dts }) => {
       El_cliente_ha_aportado_toda_la_informaci_n_o_a_n: informacionAportada,
       Tiene_trabajo_de_campo: trabajoDeCampo,
       l_cliente_tiene_un_indice_que_debe_seguirse: tieneIndice,
-      Coordinador_NP: coordinadorNp,
+
       Cu_les_son_las_fechas_espec_ficas: especificas,
       Tiene_algo_validado: algoValidado,
       Hay_que_aplicar_correcciones: aplicarCorrecciones,
@@ -141,7 +140,7 @@ const FormCerrado = ({ registerID, onContinue, onReturn, dts }) => {
     informacionAportada,
     trabajoDeCampo,
     tieneIndice,
-    coordinadorNp,
+
     especificas,
     algoValidado,
     aplicarCorrecciones,
@@ -299,24 +298,55 @@ const FormCerrado = ({ registerID, onContinue, onReturn, dts }) => {
     event.preventDefault();
 
     const camposVacios = [
-      !fechasEspecificas,
-      !especificas && fechasEspecificas === "Sí",
-      !algoHecho,
-      !cuantasPaginas,
-      !paginaCorrecciones,
-      !porcentajeDePlagio,
-      !acuerdoPagos,
-      !informacionAportada,
-      !trabajoDeCampo,
-      !tieneIndice,
-      !coordinadorNp,
-      !algoValidado,
-      !aplicarCorrecciones,
-      !paginasNuevas,
-      !habladoSobre,
-      !cantidadDeAdjuntos,
-      !tipoDeTrabajo,
-      !tipoDeInvestigacion,
+      fechasEspecificas === null ||
+        fechasEspecificas === undefined ||
+        fechasEspecificas === "",
+      (especificas === null ||
+        especificas === undefined ||
+        especificas === "") &&
+        fechasEspecificas === "Sí",
+      algoHecho === null || algoHecho === undefined || algoHecho === "",
+      cuantasPaginas === null ||
+        cuantasPaginas === undefined ||
+        cuantasPaginas === "",
+      paginaCorrecciones === null ||
+        paginaCorrecciones === undefined ||
+        paginaCorrecciones === "",
+      porcentajeDePlagio === null ||
+        porcentajeDePlagio === undefined ||
+        porcentajeDePlagio === "",
+      acuerdoPagos === null ||
+        acuerdoPagos === undefined ||
+        acuerdoPagos === "",
+      informacionAportada === null ||
+        informacionAportada === undefined ||
+        informacionAportada === "",
+      trabajoDeCampo === null ||
+        trabajoDeCampo === undefined ||
+        trabajoDeCampo === "",
+      tieneIndice === null || tieneIndice === undefined || tieneIndice === "",
+
+      algoValidado === null ||
+        algoValidado === undefined ||
+        algoValidado === "",
+      aplicarCorrecciones === null ||
+        aplicarCorrecciones === undefined ||
+        aplicarCorrecciones === "",
+      paginasNuevas === null ||
+        paginasNuevas === undefined ||
+        paginasNuevas === "",
+      habladoSobre === null ||
+        habladoSobre === undefined ||
+        habladoSobre === "",
+      cantidadDeAdjuntos === null ||
+        cantidadDeAdjuntos === undefined ||
+        cantidadDeAdjuntos === "",
+      tipoDeTrabajo === null ||
+        tipoDeTrabajo === undefined ||
+        tipoDeTrabajo === "",
+      tipoDeInvestigacion === null ||
+        tipoDeInvestigacion === undefined ||
+        tipoDeInvestigacion === "",
     ];
 
     const nombresCampos = [
@@ -377,7 +407,7 @@ const FormCerrado = ({ registerID, onContinue, onReturn, dts }) => {
       !informacionAportada,
       !trabajoDeCampo,
       !tieneIndice,
-      !coordinadorNp,
+
       !algoValidado,
       !aplicarCorrecciones,
       !paginasNuevas,
@@ -530,7 +560,7 @@ const FormCerrado = ({ registerID, onContinue, onReturn, dts }) => {
               ¿Cuántas páginas aporta el cliente?
             </label>
             <input
-              type="text"
+              type="number"
               id="fechaContratacion"
               value={cuantasPaginas}
               onChange={(e) => setCuantasPaginas(e.target.value)}
@@ -554,7 +584,7 @@ const FormCerrado = ({ registerID, onContinue, onReturn, dts }) => {
               ¿Porcentaje de plagio de lo que tenga hecho?
             </label>
             <input
-              type="text"
+              type="number"
               id="porcentajeDePlagio"
               value={porcentajeDePlagio}
               onChange={(e) => setPorcentajeDePlagio(e.target.value)}
@@ -625,16 +655,6 @@ const FormCerrado = ({ registerID, onContinue, onReturn, dts }) => {
               id="tieneIndice"
               value={tieneIndice}
               onChange={(e) => setTieneIndice(e.target.value)}
-              required
-            />
-          </div>
-          <div className="slot">
-            <label htmlFor="coordinadorNp">Coordinador NP</label>
-            <input
-              type="text"
-              id="fechaContratacion"
-              value={coordinadorNp}
-              onChange={(e) => setcoordinadorNp(e.target.value)}
               required
             />
           </div>
@@ -715,7 +735,7 @@ const FormCerrado = ({ registerID, onContinue, onReturn, dts }) => {
           <div className="slot">
             <label htmlFor="cantidadDeAdjuntos">Cantidad de adjuntos</label>
             <input
-              type="text"
+              type="number"
               id="fechaContratacion"
               value={cantidadDeAdjuntos}
               onChange={(e) => setCantidadDeAdjuntos(e.target.value)}
