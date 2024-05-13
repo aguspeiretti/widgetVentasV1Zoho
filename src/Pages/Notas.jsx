@@ -6,9 +6,11 @@ const Notas = ({ onReturn, dts }) => {
   const [nota, setNota] = useState("");
   const rEgisterID = dts.data.EntityId;
   const [remainingChars, setRemainingChars] = useState(1900);
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     id: rEgisterID,
     nota: "",
+    Actualizar_No_Procesada: true,
   });
 
   //Funcion para ver cantidad de caracteres restantes
@@ -33,6 +35,7 @@ const Notas = ({ onReturn, dts }) => {
   const config = {
     Entity: "Deals",
     APIData: formData,
+    Trigger: ["workflow"],
   };
 
   // funcion SDK soho para actualizar un elemento
@@ -109,14 +112,16 @@ const Notas = ({ onReturn, dts }) => {
     window.ZOHO.CRM.FUNCTIONS.execute(func_name, req_data)
       .then(function () {
         window.ZOHO.CRM.BLUEPRINT.proceed();
+        window.ZOHO.CRM.UI.Popup.closeReload().then(function (data) {
+          console.log(data);
+          setLoading(false);
+        });
+
+        // Independientemente del resultado, cambia el estado de carga a falso
       })
       .catch(function (error) {
         console.log(error);
       });
-
-    window.ZOHO.CRM.UI.Popup.closeReload().then(function (data) {
-      console.log(data);
-    });
   };
 
   //manejador del evento de cambio en el textArea nota
@@ -147,6 +152,8 @@ const Notas = ({ onReturn, dts }) => {
       return; // Evita que el formulario se envíe si hay campos vacíos
     }
 
+    setLoading(true);
+
     try {
       // Si todos los campos están completos, procede a guardar
       await guardarDatos(); // Espera a que se guarden los datos
@@ -155,7 +162,6 @@ const Notas = ({ onReturn, dts }) => {
       console.error("Error al guardar datos:", error);
     }
   };
-
   // funcion para voler a la componente anterior
 
   const backTo = (event) => {
@@ -171,9 +177,13 @@ const Notas = ({ onReturn, dts }) => {
             <li onClick={backTo} className="btns-guardado">
               volver
             </li>
-            <li onClick={handleSubmit} className="btns-guardado">
-              guardar y cerrar
-            </li>
+            <button
+              onClick={handleSubmit}
+              className="btns-guardado"
+              disabled={loading}
+            >
+              {loading ? "Espere..." : "Guardar y cerrar"}
+            </button>
           </ul>
         </div>
         <h2>Comentario para el coordinador: cerrado correcto</h2>

@@ -44,14 +44,14 @@ const FormPresupuesto = ({ registerID, onContinue, dts, onReturn }) => {
   // asignacion de los valores a los campos dependiendo si llegaron los datos , se ejecuta al iniciar
   useEffect(() => {
     if (newDatos) {
-      setPrimerPago(newDatos.Primer_Pago || 0);
-      setDni(newDatos.DNI_CIF || "");
+      setPrimerPago(newDatos.Primer_pago_USD || 0);
+      setDni(newDatos.DNI_NIF_CIF || "");
       setDirFacturacion(newDatos.Direcci_n_de_facturaci_n || "");
-      setNombreYapellido(newDatos.Nombre_y_apellidos || "");
-      setImporteAsesor(newDatos.Importe_Asesor || 0);
+      setNombreYapellido(newDatos.Nombre_y_Apellidos_Empresa || "");
+      setImporteAsesor(newDatos.Importe_Inicial || 0);
       setDescuentoAplicar(newDatos.Descuento_a_Aplicar || 0);
-      setNumeroPaginas(newDatos.N_mero_de_P_ginas || 0);
-      setImporteFinal(ppp);
+      setNumeroPaginas(newDatos.N_mero_de_P_ginas_LA || 0);
+      setImporteFinal(ifinal);
     }
   }, [newDatos]);
 
@@ -59,13 +59,13 @@ const FormPresupuesto = ({ registerID, onContinue, dts, onReturn }) => {
   useEffect(() => {
     setFormData({
       ...formData,
-      Primer_Pago: primerPago,
+      Primer_pago_USD: primerPago,
       Direcci_n_de_facturaci_n: dirFacturacion,
-      Nombre_y_apellidos: nombreYapellido,
-      DNI_CIF: dni,
-      Importe_Asesor: importeAsesor,
+      Nombre_y_Apellidos_Empresa: nombreYapellido,
+      DNI_NIF_CIF: dni,
+      Importe_Inicial: importeAsesor,
       Descuento_a_Aplicar: descuentoAplicar,
-      N_mero_de_P_ginas: numeroPaginas,
+      N_mero_de_P_ginas_LA: numeroPaginas,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [primerPago, dni, nombreYapellido, importeAsesor, descuentoAplicar]);
@@ -248,7 +248,7 @@ const FormPresupuesto = ({ registerID, onContinue, dts, onReturn }) => {
             <input
               type="number"
               id="importeFinal"
-              value={ppp}
+              value={ifinal}
               onChange={(e) => setImporteFinal(e.target.value)}
               required
               style={{ color: "gray" }}

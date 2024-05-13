@@ -16,15 +16,19 @@ const FormTrato = ({ registerID, onContinue, dts }) => {
   const [fechaEnvio, setFechaEnvio] = useState("");
   const [carrera, setCarrera] = useState("");
   const [fields, setFields] = useState([]);
+  const [temaProyecto, setTemaProyecto] = useState("");
+  const [anticipada, setAnticipada] = useState("");
   const [formData, setFormData] = useState({
     id: registerID,
-    Coordinacion: "",
-    Gestion: "",
+    Coord: "",
+    Gestor_a: "",
     Referencia_Cliente: "",
     Fecha_de_Entrega_para_Ventas: "",
     Fecha_de_Contrataci_n_de_Servicios: "",
-    Carrera: "",
+    Carrera_LA: "",
     Deal_Name: "",
+    Tema_del_Proyecto_LA: "",
+    Venta_anticipada: "",
   });
 
   //funcion que trae la info del modulo al cargar la pagina y los setea en la variable newDatos
@@ -42,14 +46,17 @@ const FormTrato = ({ registerID, onContinue, dts }) => {
 
   // asignacion de los valores a los campos dependiendo si llegaron los datos , se ejecuta al iniciar
   useEffect(() => {
+    console.log("esto", newDatos);
     if (newDatos) {
       setNombreTrato(newDatos.Referencia_Cliente);
-      setCoordinacion(newDatos.Coordinador_del_Proyecto || "");
-      setGestion(newDatos.Gest || "");
+      setCoordinacion(newDatos.Coord || "");
+      setGestion(newDatos.Gestor_a || "");
       setReferenciaCliente(newDatos.Referencia_Cliente || "");
       setFechaContratacion(newDatos.Fecha_de_Contrataci_n_de_Servicios || "");
       setFechaEnvio(newDatos.Fecha_de_Entrega_para_Ventas || "");
-      setCarrera(newDatos.Carrera || "");
+      setCarrera(newDatos.Carrera_LA || "");
+      setTemaProyecto(newDatos.Tema_del_Proyecto_LA || "");
+      setAnticipada(newDatos.Venta_anticipada || "");
     }
     getFields();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -60,13 +67,15 @@ const FormTrato = ({ registerID, onContinue, dts }) => {
   useEffect(() => {
     setFormData({
       ...formData,
-      Coordinador_del_Proyecto: coordinacion,
-      Gest: gestion,
+      Coord: coordinacion,
+      Gestor_a: gestion,
       Referencia_Cliente: referenciaCliente,
       Deal_Name: referenciaCliente,
       Fecha_de_Entrega_para_Ventas: fechaEnvio,
       Fecha_de_Contrataci_n_de_Servicios: fechaContratacion,
-      Carrera: carrera,
+      Carrera_LA: carrera,
+      Tema_del_Proyecto_LA: temaProyecto,
+      Venta_anticipada: anticipada,
     });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -77,6 +86,7 @@ const FormTrato = ({ registerID, onContinue, dts }) => {
     fechaEnvio,
     fechaContratacion,
     carrera,
+    anticipada,
   ]);
 
   // funcion SDK soho para actualizar un elemento
@@ -166,8 +176,9 @@ const FormTrato = ({ registerID, onContinue, dts }) => {
   // muestra solo los campos desplegables
   const pickers = fields.filter((item) => item.data_type === "picklist");
   console.log(pickers);
-  const coord = getFieldValues(fields, "Coordinador_del_Proyecto");
-  const gest = getFieldValues(fields, "Gest");
+  const coord = getFieldValues(fields, "Coord");
+  const gest = getFieldValues(fields, "Gestor_a");
+  const anti = getFieldValues(fields, "Venta_anticipada");
 
   // funcion submit para activar el guardado de datos
 
@@ -178,6 +189,7 @@ const FormTrato = ({ registerID, onContinue, dts }) => {
     const camposVacios = [
       !coordinacion,
       !gestion,
+      !anticipada,
       !referenciaCliente,
       !fechaEnvio,
       !fechaContratacion,
@@ -187,6 +199,7 @@ const FormTrato = ({ registerID, onContinue, dts }) => {
     const nombresCampos = [
       "Coordinación",
       "Gestión",
+      "venta anticipada",
       "Referecia Cliente",
       "Fecha de envio a ventas",
       "Fecha de contratacion de servicio",
@@ -268,6 +281,43 @@ const FormTrato = ({ registerID, onContinue, dts }) => {
               ))}
             </select>
           </div>
+          <div className="slot">
+            <label htmlFor="venta anticipada">Venta anticipada:</label>
+            <select
+              id="venta"
+              value={anticipada}
+              onChange={(e) => {
+                const value = e.target.value === "-None-" ? "" : e.target.value;
+                setAnticipada(value);
+                if (value === "SI") {
+                  Swal.fire({
+                    title: "¿Estás seguro?",
+                    text: `Marque "SI ESTOY SEGURO" si se trata de un proyecto que su comienzo depende de la finalizacion de un proyecto en curso`,
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Sí, estoy seguro",
+                    cancelButtonText: "Cancelar",
+                  }).then((result) => {
+                    if (result.isConfirmed) {
+                      // Aquí puedes realizar alguna acción adicional si el usuario confirma
+                    } else {
+                      // Si el usuario cancela, puedes revertir la selección si es necesario
+                      setAnticipada(""); // Esto limpiará la selección
+                    }
+                  });
+                }
+              }}
+              required
+            >
+              {anti.map((tipo, index) => (
+                <option key={index} value={tipo.display_value}>
+                  {tipo.display_value}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
         <div className="form-cont">
           <h2>informacion de proyecto</h2>
@@ -317,6 +367,16 @@ const FormTrato = ({ registerID, onContinue, dts }) => {
               id="carrera"
               value={carrera}
               onChange={(e) => setCarrera(e.target.value)}
+              required
+            />
+          </div>
+          <div className="slot">
+            <label htmlFor="carrera">Tema del proyecto:</label>
+            <input
+              type="text"
+              id="carrera"
+              value={temaProyecto}
+              onChange={(e) => setTemaProyecto(e.target.value)}
               required
             />
           </div>

@@ -7,6 +7,7 @@ import { getRecord } from "../../functions/apiFunctions";
 const FormCerrado = ({ registerID, onContinue, onReturn, dts }) => {
   const module = dts.data.Entity;
   const rEgisterID = dts.data.EntityId;
+  const [loading, setLoading] = useState(false);
   const [newDatos, setNewDatos] = useState(null);
   const [fechasEspecificas, setechasEspecificas] = useState("");
   const [algoHecho, setAlgoHecho] = useState("");
@@ -30,29 +31,32 @@ const FormCerrado = ({ registerID, onContinue, onReturn, dts }) => {
   const [comentarioCLiente, setComentarioCliente] = useState("");
   const [tratoTildado, setTratoTildado] = useState(true);
   const [fields, setFields] = useState([]);
+  const [comentarioCerradoLength, setComentarioCerradoLength] = useState(0);
+  const [comentarioClienteLength, setComentarioClienteLength] = useState(0);
   const [formData, setFormData] = useState({
     id: registerID,
-    fechasEspecificas: "",
-    algoHecho: "",
-    cuantasPaginas: "",
-    paginaCorrecciones: "",
-    porcentajeDePlagio: "",
-    acuerdoPagos: "",
-    informacionAportada: "",
-    trabajoDeCampo: "",
-    tieneIndice: "",
-
-    especificas: "",
-    algoValidado: "",
-    aplicarCorrecciones: "",
-    paginasNuevas: "",
-    habladoSobre: "",
-    cantidadDeAdjuntos: "",
-    tipoDeTrabajo: "",
-    tipoDeInvestigacion: "",
-    comentarioCerrado: "",
-    comentarioCLientes: "",
+    Tiene_fechas_espec_ficas: "",
+    Tiene_algo_hecho_el_cliente: "",
+    Cu_ntas_p_ginas_aporta_el_cliente: "",
+    Cu_ntas_p_ginas_son_de_correcciones: "",
+    Porcentaje_de_plagio_de_lo_que_tenga_hecho: "",
+    Qu_has_acordado_sobre_los_pagos_entregas: "",
+    El_cliente_ha_aportado_toda_la_informaci_n_o_a_n: "",
+    Tiene_trabajo_de_campo: "",
+    El_cliente_tiene_un_indice_que_debe_seguirse_LA: "",
+    Cu_les_son_las_fechas_espec_ficas_2: "",
+    Tiene_algo_validado: "",
+    Hay_que_aplicar_correcciones: "",
+    Cu_ntas_p_ginas_son_nuevas: "",
+    Has_hablado_con_el_cliente_sobre_la_cantidad_de_e: "",
+    Cantidad_de_adjuntos: "",
+    Tipo_de_trabajo_np: "",
+    Tipo_de_investigaci_n_np: "",
+    Comentario_cerrado_nuevas_pautas: "",
+    Comentarios_Cliente: "", // Corregido aquí el nombre del estado
   });
+
+  console.log("este es el form", tratoTildado);
 
   //funcion que trae la info del modulo al cargar la pagina y los setea en la variable newDatos
   useEffect(() => {
@@ -69,8 +73,13 @@ const FormCerrado = ({ registerID, onContinue, onReturn, dts }) => {
   // asignacion de los valores a los campos dependiendo si llegaron los datos , se ejecuta al iniciar
   useEffect(() => {
     getFields();
+
     if (newDatos) {
-      setTratoTildado(newDatos.Trato_Latam_Creado || "");
+      // const fechaOriginal = newDatos.Cu_les_son_las_fechas_espec_ficas_2;
+      // const componentesFecha = fechaOriginal.split("/");
+      // const fechaFormateada = `${componentesFecha[2]}-${componentesFecha[1]}-${componentesFecha[0]}`;
+      // console.log(fechaFormateada); // Salida: 2024-05-24
+      setTratoTildado(newDatos.Trato_Latam_enviado_a_coordinacion || "");
       setechasEspecificas(newDatos.Tiene_fechas_espec_ficas || "");
       setAlgoHecho(newDatos.Tiene_algo_hecho_el_cliente || "");
       setCuantasPaginas(newDatos.Cu_ntas_p_ginas_aporta_el_cliente || 0);
@@ -85,10 +94,10 @@ const FormCerrado = ({ registerID, onContinue, onReturn, dts }) => {
       );
       setTrabajoDeCampo(newDatos.Tiene_trabajo_de_campo || "");
       setTieneIndice(
-        newDatos.El_cliente_tiene_un_indice_que_debe_seguirse || ""
+        newDatos.El_cliente_tiene_un_indice_que_debe_seguirse_LA || ""
       );
 
-      setEspecificas(newDatos.Cu_les_son_las_fechas_espec_ficas || "");
+      setEspecificas(newDatos.Cu_les_son_las_fechas_espec_ficas_2 || "");
       setAlgoValidado(newDatos.Tiene_algo_validado || "");
       setAplicarCorrecciones(newDatos.Hay_que_aplicar_correcciones || "");
       setPaginasNuevas(newDatos.Cu_ntas_p_ginas_son_nuevas || 0);
@@ -98,13 +107,19 @@ const FormCerrado = ({ registerID, onContinue, onReturn, dts }) => {
       setCantidadDeAdjuntos(newDatos.Cantidad_de_adjuntos || 0);
       setTipoDeTrabajo(newDatos.Tipo_de_trabajo_np || "");
       setTipoDeInvestigacion(newDatos.Tipo_de_investigaci_n_np || "");
-      setComentarioCerrado(newDatos.Comentario_cerrado_np || "");
+      setComentarioCerrado(newDatos.Comentario_cerrado_nuevas_pautas || "");
       setComentarioCliente(newDatos.Comentarios_Cliente || "");
     }
   }, [newDatos]);
 
+  // const fechaOriginal = especificas.toString();
+  // const componentesFecha = fechaOriginal.split("-");
+  // const fechaFormateada = `${componentesFecha[2]}/${componentesFecha[1]}/${componentesFecha[0]}`;
+  // console.log(fechaFormateada); // Salida: 24/05/2024
+
   // seteo de los datos del form con las variables que ya estaba antes
   useEffect(() => {
+    console.log(typeof especificas);
     setFormData({
       ...formData,
       Tiene_fechas_espec_ficas: fechasEspecificas,
@@ -116,17 +131,16 @@ const FormCerrado = ({ registerID, onContinue, onReturn, dts }) => {
       El_cliente_ha_aportado_toda_la_informaci_n_o_a_n: informacionAportada,
       Tiene_trabajo_de_campo: trabajoDeCampo,
       l_cliente_tiene_un_indice_que_debe_seguirse: tieneIndice,
-
-      Cu_les_son_las_fechas_espec_ficas: especificas,
+      Cu_les_son_las_fechas_espec_ficas_2: especificas,
       Tiene_algo_validado: algoValidado,
       Hay_que_aplicar_correcciones: aplicarCorrecciones,
       Cu_ntas_p_ginas_son_nuevas: paginasNuevas,
       Has_hablado_con_el_cliente_sobre_la_cantidad_de_e: habladoSobre,
-      El_cliente_tiene_un_indice_que_debe_seguirse: tieneIndice,
+      El_cliente_tiene_un_indice_que_debe_seguirse_LA: tieneIndice,
       Cantidad_de_adjuntos: cantidadDeAdjuntos,
       Tipo_de_trabajo_np: tipoDeTrabajo,
       Tipo_de_investigaci_n_np: tipoDeInvestigacion,
-      Comentario_cerrado_np: comentarioCerrado,
+      Comentario_cerrado_nuevas_pautas: comentarioCerrado,
       Comentarios_Cliente: comentarioCLiente, // Corregido aquí el nombre del estado
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -140,7 +154,6 @@ const FormCerrado = ({ registerID, onContinue, onReturn, dts }) => {
     informacionAportada,
     trabajoDeCampo,
     tieneIndice,
-
     especificas,
     algoValidado,
     aplicarCorrecciones,
@@ -152,13 +165,6 @@ const FormCerrado = ({ registerID, onContinue, onReturn, dts }) => {
     comentarioCerrado,
     comentarioCLiente,
   ]);
-
-  //funcion pora volver al componente anterior
-
-  const backTo = (event) => {
-    event.preventDefault();
-    onReturn();
-  };
 
   // funcion para traer todos los campos del elemento
 
@@ -182,8 +188,6 @@ const FormCerrado = ({ registerID, onContinue, onReturn, dts }) => {
     return field ? field.pick_list_values || [] : [];
   };
 
-  const [comentarioCerradoLength, setComentarioCerradoLength] = useState(0);
-  const [comentarioClienteLength, setComentarioClienteLength] = useState(0);
   const fechas = getFieldValues(fields, "Tiene_fechas_espec_ficas");
   const algo = getFieldValues(fields, "Tiene_algo_hecho_el_cliente");
   const validado = getFieldValues(fields, "Tiene_algo_validado");
@@ -258,40 +262,6 @@ const FormCerrado = ({ registerID, onContinue, onReturn, dts }) => {
       });
   };
 
-  //funcion pora limitar caracteres y espacios de los textArea
-
-  const handleComentarioCerradoChange = (e) => {
-    const inputValue = e.target.value;
-    // Limitar la longitud del comentario a 1900 caracteres
-    if (inputValue.length <= 1900) {
-      setComentarioCerrado(inputValue);
-      setComentarioCerradoLength(inputValue.length);
-    }
-  };
-  const handleComentarioClienteChange = (e) => {
-    const inputValue = e.target.value;
-    // Limitar la longitud del comentario a 1900 caracteres
-    if (inputValue.length <= 25000) {
-      setComentarioCliente(inputValue);
-      setComentarioClienteLength(inputValue.length);
-    }
-  };
-
-  //funcion para mostar o no y limpiar el campo fechas especificas
-
-  const handleFechasEspecificasChange = (e) => {
-    if (e.target.value === "-None-") {
-      setechasEspecificas("");
-    } else {
-      setechasEspecificas(e.target.value);
-    }
-
-    // Limpiar el campo de fechas específicas si el valor cambia a "No"
-    if (e.target.value === "No") {
-      setEspecificas("");
-    }
-  };
-
   // funcion submit para activar el guardado de datos
 
   const handleSubmitRedirect = (event) => {
@@ -325,7 +295,6 @@ const FormCerrado = ({ registerID, onContinue, onReturn, dts }) => {
         trabajoDeCampo === undefined ||
         trabajoDeCampo === "",
       tieneIndice === null || tieneIndice === undefined || tieneIndice === "",
-
       algoValidado === null ||
         algoValidado === undefined ||
         algoValidado === "",
@@ -395,26 +364,56 @@ const FormCerrado = ({ registerID, onContinue, onReturn, dts }) => {
   };
 
   // funcion para cerrar el widget y actualizar datos
-  const cerrarWidget = () => {
+  const cerrarWidget = async () => {
     const camposVacios = [
-      !fechasEspecificas,
-      !especificas && fechasEspecificas === "Sí",
-      !algoHecho,
-      !cuantasPaginas,
-      !paginaCorrecciones,
-      !porcentajeDePlagio,
-      !acuerdoPagos,
-      !informacionAportada,
-      !trabajoDeCampo,
-      !tieneIndice,
-
-      !algoValidado,
-      !aplicarCorrecciones,
-      !paginasNuevas,
-      !habladoSobre,
-      !cantidadDeAdjuntos,
-      !tipoDeTrabajo,
-      !tipoDeInvestigacion,
+      fechasEspecificas === null ||
+        fechasEspecificas === undefined ||
+        fechasEspecificas === "",
+      (especificas === null ||
+        especificas === undefined ||
+        especificas === "") &&
+        fechasEspecificas === "Sí",
+      algoHecho === null || algoHecho === undefined || algoHecho === "",
+      cuantasPaginas === null ||
+        cuantasPaginas === undefined ||
+        cuantasPaginas === "",
+      paginaCorrecciones === null ||
+        paginaCorrecciones === undefined ||
+        paginaCorrecciones === "",
+      porcentajeDePlagio === null ||
+        porcentajeDePlagio === undefined ||
+        porcentajeDePlagio === "",
+      acuerdoPagos === null ||
+        acuerdoPagos === undefined ||
+        acuerdoPagos === "",
+      informacionAportada === null ||
+        informacionAportada === undefined ||
+        informacionAportada === "",
+      trabajoDeCampo === null ||
+        trabajoDeCampo === undefined ||
+        trabajoDeCampo === "",
+      tieneIndice === null || tieneIndice === undefined || tieneIndice === "",
+      algoValidado === null ||
+        algoValidado === undefined ||
+        algoValidado === "",
+      aplicarCorrecciones === null ||
+        aplicarCorrecciones === undefined ||
+        aplicarCorrecciones === "",
+      paginasNuevas === null ||
+        paginasNuevas === undefined ||
+        paginasNuevas === "",
+      habladoSobre === null ||
+        habladoSobre === undefined ||
+        habladoSobre === "",
+      cantidadDeAdjuntos === null ||
+        cantidadDeAdjuntos === undefined ||
+        cantidadDeAdjuntos === "",
+      tipoDeTrabajo === null ||
+        tipoDeTrabajo === undefined ||
+        tipoDeTrabajo === "",
+      tipoDeInvestigacion === null ||
+        tipoDeInvestigacion === undefined ||
+        tipoDeInvestigacion === "",
     ];
 
     const nombresCampos = [
@@ -456,29 +455,90 @@ const FormCerrado = ({ registerID, onContinue, onReturn, dts }) => {
       });
       return; // Evita que el formulario se envíe si hay campos vacíos
     }
-    guardarDatos();
 
-    //funcion execute ejecuta codigo externo
+    setLoading(true);
 
-    let func_name = "test";
-    let req_data = {
-      arguments: JSON.stringify({
-        dealID: rEgisterID,
-      }),
-    };
-    window.ZOHO.CRM.FUNCTIONS.execute(func_name, req_data)
-      .then(function () {
-        window.ZOHO.CRM.BLUEPRINT.proceed();
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    try {
+      // Guarda los datos
+      await guardarDatos();
 
-    //cierra el widget
+      // Ejecuta el código externo
+      let func_name = "CreateProyectInCoordinacion";
+      let req_data = {
+        arguments: JSON.stringify({
+          dealID: rEgisterID,
+        }),
+      };
 
-    window.ZOHO.CRM.UI.Popup.closeReload().then(function (data) {
-      console.log(data);
-    });
+      getRecord(module, rEgisterID)
+        .then(function (result) {
+          const datos = result.register;
+          console.log("recond", datos);
+        })
+        .catch(function (error) {
+          // console.error(error);
+        });
+
+      try {
+        const res = await window.ZOHO.CRM.FUNCTIONS.execute(
+          func_name,
+          req_data
+        );
+        console.log("respuestaaa", res);
+      } catch (error) {
+        console.log(console.error());
+      }
+
+      // Procede con el blueprint
+      window.ZOHO.CRM.BLUEPRINT.proceed();
+
+      // Cierra el widget después de que se hayan completado todas las operaciones
+      await window.ZOHO.CRM.UI.Popup.closeReload();
+    } catch (error) {
+      console.log(error);
+    }
+    setLoading(false);
+  };
+
+  //funcion pora limitar caracteres y espacios de los textArea
+
+  const handleComentarioCerradoChange = (e) => {
+    const inputValue = e.target.value;
+    // Limitar la longitud del comentario a 1900 caracteres
+    if (inputValue.length <= 1900) {
+      setComentarioCerrado(inputValue);
+      setComentarioCerradoLength(inputValue.length);
+    }
+  };
+  const handleComentarioClienteChange = (e) => {
+    const inputValue = e.target.value;
+    // Limitar la longitud del comentario a 1900 caracteres
+    if (inputValue.length <= 25000) {
+      setComentarioCliente(inputValue);
+      setComentarioClienteLength(inputValue.length);
+    }
+  };
+
+  //funcion para mostar o no y limpiar el campo fechas especificas
+
+  const handleFechasEspecificasChange = (e) => {
+    if (e.target.value === "-None-") {
+      setechasEspecificas("");
+    } else {
+      setechasEspecificas(e.target.value);
+    }
+
+    // Limpiar el campo de fechas específicas si el valor cambia a "No"
+    if (e.target.value === "No") {
+      setEspecificas("");
+    }
+  };
+
+  //funcion pora volver al componente anterior
+
+  const backTo = (event) => {
+    event.preventDefault();
+    onReturn();
   };
 
   return (
@@ -497,9 +557,14 @@ const FormCerrado = ({ registerID, onContinue, onReturn, dts }) => {
               Guardar y Continuar
             </li>
           ) : (
-            <li onClick={cerrarWidget} className="btns-guardado" type="submit">
-              Guardar y Cerrar
-            </li>
+            <button
+              onClick={cerrarWidget}
+              disabled={loading}
+              className="btns-guardado"
+              type="submit"
+            >
+              {loading ? "Espere..." : "Guardar y cerrar"}
+            </button>
           )}
         </ul>
       </div>
@@ -529,7 +594,7 @@ const FormCerrado = ({ registerID, onContinue, onReturn, dts }) => {
                 ¿Cuáles son las fechas específicas?
               </label>
               <input
-                type="date"
+                type="text"
                 id="cualesFechasEspecificas"
                 value={especificas}
                 onChange={(e) => setEspecificas(e.target.value)}
